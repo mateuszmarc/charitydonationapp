@@ -1,0 +1,49 @@
+### Create category request
+POST http://localhost:8080/app/categories
+Content-Type: application/json
+
+{
+  "name": "ubrania"
+}
+
+### Create category request(invalid body)
+POST http://localhost:8080/app/categories
+Content-Type: application/json
+
+{
+  "name": "ubrania",
+  "secondName": "mateusz"
+}
+
+### Read category request
+GET http://localhost:8080/app/categories/1
+
+### Read category request(category not in database)
+GET http://localhost:8080/app/categories/1777
+
+### Update category request
+PUT http://localhost:8080/app/categories
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "zabawki"
+}
+
+### Update category request(category not in database)
+POST http://localhost:8080/app/categories
+Content-Type: application/json
+
+{
+  "id": 1111,
+  "name": "zabawki"
+}
+
+### Delete category request
+DELETE http://localhost:8080/app/categories/1
+
+
+### Delete category request(id not in database)
+DELETE http://localhost:8080/app/categories/555
+
+

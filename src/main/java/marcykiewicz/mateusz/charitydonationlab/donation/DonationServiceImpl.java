@@ -3,12 +3,15 @@ package marcykiewicz.mateusz.charitydonationlab.donation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marcykiewicz.mateusz.charitydonationlab.category.Category;
 import marcykiewicz.mateusz.charitydonationlab.category.CategoryRepository;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryDTO;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryMapper;
 import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationDTO;
 import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationMapper;
 import marcykiewicz.mateusz.charitydonationlab.exception.ResourceNotFoundException;
+import marcykiewicz.mateusz.charitydonationlab.institution.Institution;
+import marcykiewicz.mateusz.charitydonationlab.institution.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ public class DonationServiceImpl implements DonationService {
 
     private final DonationRepository donationRepository;
     private final CategoryRepository categoryRepository;
+    private final InstitutionRepository institutionRepository;
     private final DonationMapper donationMapper;
     private final CategoryMapper categoryMapper;
 
@@ -66,11 +70,31 @@ public class DonationServiceImpl implements DonationService {
     @Override
     public DonationDTO save(DonationDTO donationDTO) {
 
+
+        Institution institution = institutionRepository.findById(donationDTO.getInstitutionDTO().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Institution with id: %s not found".formatted(donationDTO.getInstitutionDTO().getId())));
+
+
+        List<Category> categories = donationDTO.getCategoryDTOs().stream()
+                .map(categoryDTO -> categoryRepository.findById(categoryDTO.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Category with id: %s not found".formatted(categoryDTO.getId()))))
+                .toList();
+
+
         Donation donation = donationMapper.toEntity(donationDTO);
 
-        donationRepository.save(donation);
+        donation.setCategories(categories);
+        donation.setInstitution(institution);
 
-        return donationMapper.toDTO(donation);
+       Donation savedDonation = donationRepository.save(donation);
+
+       DonationDTO savedDonationDTO = donationMapper.toDTO(savedDonation);
+
+       savedDonationDTO.setInstitutionDTO(donationDTO.getInstitutionDTO());
+       savedDonationDTO.setCategoryDTOs(donationDTO.getCategoryDTOs());
+
+       return savedDonationDTO;
+
     }
 
     @Override

@@ -1,0 +1,54 @@
+### Retrieve institutions by id
+GET http://localhost:8080/app/institutions/1
+Content-Type: application/json
+
+### Add institution
+POST http://localhost:8080/app/institutions
+Content-Type: application/json
+
+{
+  "name": "New Institution",
+  "description": "Description of the new institution"
+}
+
+### Update institution
+PUT http://localhost:8080/app/institutions
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Updated Institution",
+  "description": "Updated description of the institution"
+}
+
+### Delete institurions by id
+DELETE http://localhost:8080/app/institutions/1
+Content-Type: application/json
+
+
+
+### Retrieve institutions by id(invalid id)
+GET http://localhost:8080/app/institutions/111111
+Content-Type: application/json
+
+### Add institution
+POST http://localhost:8080/app/institutions
+Content-Type: application/json
+
+{
+  "name": ""
+}
+
+### Update institution
+PUT http://localhost:8080/app/institutions
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "",
+  "description": "Updated description with invalid name"
+}
+
+### Delete institutions by id
+DELETE http://localhost:8080/app/institutions/999999
+Content-Type: application/json

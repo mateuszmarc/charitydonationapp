@@ -1,14 +1,12 @@
-package marcykiewicz.mateusz.charitydonationlab.category;
+package marcykiewicz.mateusz.charitydonationlab.institution;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-@Data
 @Entity
-@Table(name = "categories")
-public class Category {
+@Data
+@Table(name = "institutions")
+public class Institution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,4 +15,8 @@ public class Category {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
+    private String description;
+
 }

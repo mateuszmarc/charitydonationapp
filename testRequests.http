@@ -31,7 +31,7 @@ Content-Type: application/json
 }
 
 ### Update category request(category not in database)
-POST http://localhost:8080/app/categories
+PUT http://localhost:8080/app/categories
 Content-Type: application/json
 
 {

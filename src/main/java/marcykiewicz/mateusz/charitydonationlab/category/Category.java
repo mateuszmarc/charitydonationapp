@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -26,7 +27,7 @@ public class Category {
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-    private List<Donation> donations;
+    private List<Donation> donations = new ArrayList<>();
 
 
     public void addDonation(Donation donation) {

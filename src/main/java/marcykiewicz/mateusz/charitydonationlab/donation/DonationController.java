@@ -30,6 +30,7 @@ public class DonationController {
     @PostMapping
     public DonationDTO saveDonation(@RequestBody DonationDTO donationDTO) {
 
+        log.info("Donation to be saved: {}", donationDTO);
         return donationService.save(donationDTO);
     }
 

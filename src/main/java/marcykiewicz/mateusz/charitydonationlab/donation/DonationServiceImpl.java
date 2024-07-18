@@ -71,14 +71,10 @@ public class DonationServiceImpl implements DonationService {
     public DonationDTO save(DonationDTO donationDTO) {
 
 
-        Institution institution = institutionRepository.findById(donationDTO.getInstitutionDTO().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Institution with id: %s not found".formatted(donationDTO.getInstitutionDTO().getId())));
+        Institution institution = getInstitutionFromDonationDTO(donationDTO);
 
 
-        List<Category> categories = donationDTO.getCategoryDTOs().stream()
-                .map(categoryDTO -> categoryRepository.findById(categoryDTO.getId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Category with id: %s not found".formatted(categoryDTO.getId()))))
-                .toList();
+        List<Category> categories = getCategoriesFromDonationDTO(donationDTO);
 
 
         Donation donation = donationMapper.toEntity(donationDTO);
@@ -100,17 +96,52 @@ public class DonationServiceImpl implements DonationService {
     @Override
     public DonationDTO update(DonationDTO donationDTO) {
 
-        Optional<Donation> optionalDonation = donationRepository.findByIdFetchCategories(donationDTO.getId());
+        Donation existingDonation = donationRepository.findByIdFetchCategories(donationDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Donation with id: %s not found".formatted(donationDTO.getId())));
 
-        return optionalDonation.map(donation -> {
 
-                    Donation updatedDonation = donationMapper.toEntity(donationDTO);
+        updateDonationFields(donationDTO, existingDonation);
 
-                    donationRepository.save(updatedDonation);
+        donationRepository.save(existingDonation);
 
-                    return donationMapper.toDTO(updatedDonation);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException(resourceNOtFoundExceptionMessage.formatted(donationDTO.getId())));
+        DonationDTO updatedDonationDTO = donationMapper.toDTO(existingDonation);
+
+        updatedDonationDTO.setInstitutionDTO(donationDTO.getInstitutionDTO());
+        updatedDonationDTO.setCategoryDTOs(donationDTO.getCategoryDTOs());
+
+        return updatedDonationDTO;
+    }
+
+    private void updateDonationFields(DonationDTO donationSourceDTO, Donation targetDonation) {
+
+        Institution institution = getInstitutionFromDonationDTO(donationSourceDTO);
+
+        List<Category> categories = getCategoriesFromDonationDTO(donationSourceDTO);
+
+        targetDonation.setQuantity(donationSourceDTO.getQuantity());
+        targetDonation.setInstitution(institution);
+
+        targetDonation.getCategories().clear();
+        targetDonation.getCategories().addAll(categories);
+
+        targetDonation.setStreet(donationSourceDTO.getStreet());
+        targetDonation.setCity(donationSourceDTO.getCity());
+        targetDonation.setZipCode(donationSourceDTO.getZipCode());
+        targetDonation.setPickUpDate(donationSourceDTO.getPickUpDate());
+        targetDonation.setPickUpTime(donationSourceDTO.getPickUpTime());
+        targetDonation.setPickUpComment(donationSourceDTO.getPickUpComment());
+    }
+
+    private Institution getInstitutionFromDonationDTO(DonationDTO donationDTO) {
+        return institutionRepository.findById(donationDTO.getInstitutionDTO().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Institution with id: %s not found".formatted(donationDTO.getInstitutionDTO().getId())));
+    }
+
+    private List<Category> getCategoriesFromDonationDTO(DonationDTO donationDTO) {
+        return donationDTO.getCategoryDTOs().stream()
+                .map(categoryDTO -> categoryRepository.findById(categoryDTO.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Category with id: %s not found".formatted(categoryDTO.getId()))))
+                .toList();
     }
 
     @Override

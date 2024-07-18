@@ -7,6 +7,7 @@ import marcykiewicz.mateusz.charitydonationlab.institution.Institution;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,7 +30,7 @@ public class Donation {
             joinColumns = @JoinColumn(name = "donation_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     @ManyToOne(cascade = {
             CascadeType.MERGE

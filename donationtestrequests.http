@@ -47,12 +47,12 @@ Content-Type: application/json
 
 {
   "quantity": 5,
-  "categories": [
+  "categoryDTOs": [
     {
       "id": 1
     }
   ],
-  "institution": {
+  "institutionDTO": {
     "id": 1
   },
   "street": "123 Example St",
@@ -63,4 +63,25 @@ Content-Type: application/json
   "pickUpComment": "Leave at the front door"
 }
 
+### Update donation including related entities
+PUT http://localhost:8080/app/donations
+Content-Type: application/json
 
+{
+  "id": 1,
+  "quantity": 7,
+  "categoryDTOs": [
+    {
+      "id": 3
+    }
+  ],
+  "institutionDTO": {
+    "id": 5
+  },
+  "street": "123 Example St",
+  "city": "Example City",
+  "zipCode": "12345",
+  "pickUpDate": "2024-07-18",
+  "pickUpTime": "14:00:00",
+  "pickUpComment": "Leave at the front door"
+}

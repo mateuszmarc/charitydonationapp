@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,5 +28,5 @@ public class Institution {
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-    private List<Donation> donation;
+    private List<Donation> donation = new ArrayList<>();
 }

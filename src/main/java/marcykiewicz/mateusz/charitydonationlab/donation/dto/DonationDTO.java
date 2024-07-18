@@ -6,6 +6,7 @@ import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,7 +16,7 @@ public class DonationDTO {
 
     private Integer quantity;
 
-    private List<CategoryDTO> categoryDTOs;
+    private List<CategoryDTO> categoryDTOs = new ArrayList<>();
 
     private InstitutionDTO institutionDTO;
 

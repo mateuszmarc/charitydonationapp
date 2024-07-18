@@ -10,6 +10,8 @@ public interface CategoryService {
 
     CategoryDTO findById(Long id);
 
+    CategoryDTO findByIdFetchDonations(Long id);
+
     List<CategoryDTO> findAll();
 
     CategoryDTO update(CategoryDTO categoryDTO);

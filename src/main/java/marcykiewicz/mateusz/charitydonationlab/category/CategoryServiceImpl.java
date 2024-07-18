@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryDTO;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryMapper;
+import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationDTO;
+import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationMapper;
 import marcykiewicz.mateusz.charitydonationlab.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final DonationMapper donationMapper;
 
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO) {
@@ -40,6 +43,24 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
 
         return optionalCategory.map(categoryMapper::toDTO)
+                .orElseThrow(() -> new ResourceNotFoundException(resourceNotFoundExceptionMessage.formatted(id)));
+    }
+
+    @Override
+    public CategoryDTO findByIdFetchDonations(Long id) {
+
+        Optional<Category> optionalCategory = categoryRepository.findByIdFetchDonations(id);
+
+        return optionalCategory.map(
+                        category -> {
+                            List<DonationDTO> donationDTOs = category.getDonations().stream().map(donationMapper::toDTO).toList();
+
+                            CategoryDTO categoryDTO = categoryMapper.toDTO(category);
+                            categoryDTO.setDonationDTOs(donationDTOs);
+
+                            return categoryDTO;
+                        }
+                )
                 .orElseThrow(() -> new ResourceNotFoundException(resourceNotFoundExceptionMessage.formatted(id)));
     }
 

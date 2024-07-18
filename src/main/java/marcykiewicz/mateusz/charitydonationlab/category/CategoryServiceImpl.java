@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryDTO;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryMapper;
+import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
+import marcykiewicz.mateusz.charitydonationlab.donation.DonationRepository;
 import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationDTO;
 import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationMapper;
 import marcykiewicz.mateusz.charitydonationlab.exception.ResourceNotFoundException;
@@ -24,13 +26,22 @@ public class CategoryServiceImpl implements CategoryService {
     private String resourceNotFoundExceptionMessage;
 
     private final CategoryRepository categoryRepository;
+    private final DonationRepository donationRepository;
+
     private final CategoryMapper categoryMapper;
     private final DonationMapper donationMapper;
 
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO) {
 
+        List<Donation> donations = categoryDTO.getDonationDTOs().stream().map(donationDTO ->
+                donationRepository.findById(donationDTO.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Donation with id: %s not found".formatted(donationDTO.getId())))
+        ).toList();
+
         Category category = categoryMapper.toEntity(categoryDTO);
+
+        category.setDonations(donations);
 
         categoryRepository.save(category);
 
@@ -74,9 +85,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO update(CategoryDTO categoryDTO) {
 
-        CategoryDTO foundCategoryDTO = findById(categoryDTO.getId());
+        Category category = categoryRepository.findById(categoryDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id: %s not found".formatted(categoryDTO.getId())));
 
-        Category category = categoryMapper.toEntity(categoryDTO);
+//        log.info("Category to update: {}", category);
+//
+//        List<Donation> donations = categoryDTO.getDonationDTOs().stream().map(donationDTO -> donationRepository.findById(donationDTO.getId())
+//                .orElseThrow(() -> new ResourceNotFoundException("Donation with id: %s not found".formatted(donationDTO.getId())))).toList();
+//
+//        category.setDonations(donations);
 
         Category updatedCategory = categoryRepository.save(category);
 

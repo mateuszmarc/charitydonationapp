@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "institutions")
@@ -20,10 +22,10 @@ public class Institution {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(mappedBy = "institution", cascade = {
+    @OneToMany(mappedBy = "institution", cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-    private Donation donation;
+    private List<Donation> donation;
 }

@@ -23,9 +23,7 @@ public class Donation {
     private Integer quantity;
 
     @ManyToMany(cascade = {
-            CascadeType.DETACH,
             CascadeType.MERGE,
-            CascadeType.REFRESH,
     })
     @JoinTable(name = "donations_categories",
             joinColumns = @JoinColumn(name = "donation_id"),
@@ -33,10 +31,8 @@ public class Donation {
     )
     private List<Category> categories;
 
-    @OneToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
+    @ManyToOne(cascade = {
+            CascadeType.MERGE
     })
     @JoinColumn(name = "institution_id")
     private Institution institution;

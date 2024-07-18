@@ -1,0 +1,87 @@
+### Get all donations
+GET http://localhost:8080/app/donations
+Content-Type: application/json
+
+### Get donation by id
+GET http://localhost:8080/app/donations/1
+Content-Type: application/json
+
+
+### Create new donation - without institution and categories
+POST http://localhost:8080/app/donations
+Content-Type: application/json
+
+{
+  "quantity": 5,
+  "street": "123 Example St",
+  "city": "Example City",
+  "zipCode": "12345",
+  "pickUpDate": "2024-07-18",
+  "pickUpTime": "14:00:00",
+  "pickUpComment": "Leave at the front door"
+}
+
+### Update existing donation - without institution and categories
+PUT http://localhost:8080/app/donations
+Content-Type: application/json
+
+{
+"id": 1,
+"quantity": 6,
+"street": "456 Example Ave",
+"city": "Example Town",
+"zipCode": "67890",
+"pickUpDate": "2024-07-19",
+"pickUpTime": "15:00:00",
+"pickUpComment": "Ring the bell"
+}
+
+### Delete donation by id
+DELETE http://localhost:8080/app/donations/1
+Content-Type: application/json
+
+
+### Create donation including related entities
+POST http://localhost:8080/app/donations
+Content-Type: application/json
+
+{
+  "quantity": 5,
+  "categoryDTOs": [
+    {
+      "id": 1
+    }
+  ],
+  "institutionDTO": {
+    "id": 1
+  },
+  "street": "123 Example St",
+  "city": "Example City",
+  "zipCode": "12345",
+  "pickUpDate": "2024-07-18",
+  "pickUpTime": "14:00:00",
+  "pickUpComment": "Leave at the front door"
+}
+
+### Update donation including related entities
+PUT http://localhost:8080/app/donations
+Content-Type: application/json
+
+{
+  "id": 1,
+  "quantity": 7,
+  "categoryDTOs": [
+    {
+      "id": 3
+    }
+  ],
+  "institutionDTO": {
+    "id": 5
+  },
+  "street": "123 Example St",
+  "city": "Example City",
+  "zipCode": "12345",
+  "pickUpDate": "2024-07-18",
+  "pickUpTime": "14:00:00",
+  "pickUpComment": "Leave at the front door"
+}

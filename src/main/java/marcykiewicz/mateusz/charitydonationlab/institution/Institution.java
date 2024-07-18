@@ -2,6 +2,10 @@ package marcykiewicz.mateusz.charitydonationlab.institution;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,4 +23,10 @@ public class Institution {
     @Column(name = "description")
     private String description;
 
+    @OneToMany(mappedBy = "institution", cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+    })
+    private List<Donation> donation = new ArrayList<>();
 }

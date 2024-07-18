@@ -28,5 +28,5 @@ public class Institution {
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-    private List<Donation> donation = new ArrayList<>();
+    private List<Donation> donations = new ArrayList<>();
 }

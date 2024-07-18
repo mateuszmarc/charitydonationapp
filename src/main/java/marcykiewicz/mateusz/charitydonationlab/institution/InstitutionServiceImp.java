@@ -3,6 +3,8 @@ package marcykiewicz.mateusz.charitydonationlab.institution;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
+import marcykiewicz.mateusz.charitydonationlab.donation.DonationRepository;
 import marcykiewicz.mateusz.charitydonationlab.exception.ResourceNotFoundException;
 import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionDTO;
 import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionMapper;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @Service
 public class InstitutionServiceImp implements InstitutionService {
 
+    private final DonationRepository donationRepository;
     @Value("${resourceNotFoundExceptionMessage}")
     private String resourceNotFoundExceptionMessage;
 
@@ -27,17 +30,21 @@ public class InstitutionServiceImp implements InstitutionService {
     @Override
     public InstitutionDTO save(InstitutionDTO institutionDTO) {
 
-        log.info("DTO before mapping: {}", institutionDTO);
+        List<Donation> donations = institutionDTO.getDonationDTOs().stream().map(
+                donationDTO -> donationRepository.findById(donationDTO.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Donation with id: %s not found".formatted(donationDTO.getId())))
+        ).toList();
 
         Institution institution = institutionMapper.toEntity(institutionDTO);
-        log.info("Entity after mapping: {}", institution);
+        institution.setDonations(donations);
 
-        institutionRepository.save(institution);
+        Institution savedInstitution = institutionRepository.save(institution);
 
-        InstitutionDTO savedDTO = institutionMapper.toDTO(institution);
+        InstitutionDTO savedInstitutionDTO = institutionMapper.toDTO(savedInstitution);
 
-        log.info("DTO after saving: {}", savedDTO);
-        return savedDTO;
+        savedInstitutionDTO.setDonationDTOs(institutionDTO.getDonationDTOs());
+
+        return savedInstitutionDTO;
     }
 
     @Override
@@ -59,22 +66,53 @@ public class InstitutionServiceImp implements InstitutionService {
     @Override
     public InstitutionDTO update(InstitutionDTO institutionDTO) {
 
-        InstitutionDTO foundInstitutionDTO = findById(institutionDTO.getId());
+        Institution existingInstitution = institutionRepository.findByIdFetchDonations(institutionDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Institution with id: %s not found".formatted(institutionDTO.getId())));
 
-        Institution institution = institutionMapper.toEntity(institutionDTO);
+        log.info("Institution to update {}", existingInstitution);
 
-        Institution updatedinstitution = institutionRepository.save(institution);
+        List<Donation> donations = institutionDTO.getDonationDTOs().stream().map(donationDTO -> donationRepository.findById(donationDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Donation with id: %s not found".formatted(donationDTO.getId())))).toList();
 
-        return institutionMapper.toDTO(updatedinstitution);
+        log.info("Donations from updated Institution {}", donations);
+
+        existingInstitution.setName(institutionDTO.getName());
+        existingInstitution.setDescription(institutionDTO.getDescription());
+
+
+//        log.info("Before clear");
+//        existingInstitution.getDonations().clear();
+//        log.info("After clear");
+//
+//        existingInstitution.setDonations(donations);
+//
+//        log.info("Entity with updated donations: {}", existingInstitution);
+//
+        Institution updatedInstitution = institutionRepository.save(existingInstitution);
+//
+//        log.info("Institution updated");
+
+        InstitutionDTO updatedInstitutionDTO = institutionMapper.toDTO(updatedInstitution);
+
+
+        updatedInstitutionDTO.setDonationDTOs(institutionDTO.getDonationDTOs());
+
+        return updatedInstitutionDTO;
     }
 
 
     @Override
     public InstitutionDTO deleteById(Long id) {
 
-        InstitutionDTO institutionDTO = findById(id);
+        Institution institution = institutionRepository.findByIdFetchDonations(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Institution with id: %s not found".formatted(id)));
+
+        institution.getDonations().forEach(donation -> {
+            donation.setInstitution(null);
+            donationRepository.save(donation);
+        });
 
         institutionRepository.deleteById(id);
-        return institutionDTO;
+        return institutionMapper.toDTO(institution);
     }
 }

@@ -3,6 +3,7 @@ package marcykiewicz.mateusz.charitydonationlab.institution.dto;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,5 +15,5 @@ public class InstitutionDTO {
 
     private String description;
 
-    private List<DonationDTO> donationDTOs;
+    private List<DonationDTO> donationDTOs = new ArrayList<>();
 }

@@ -12,6 +12,8 @@ public interface InstitutionService {
 
     List<InstitutionDTO> findAll();
 
+    List<List<InstitutionDTO>> findAllInstitutionsGroupedBYTwo();
+
     InstitutionDTO update(InstitutionDTO institutionDTO);
 
     InstitutionDTO deleteById(Long id);

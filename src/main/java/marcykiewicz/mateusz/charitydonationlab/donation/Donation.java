@@ -20,8 +20,10 @@ public class Donation {
     @Column
     private Long id;
 
+
     @Column(name = "quantity")
     private Integer quantity;
+
 
     @ManyToMany(cascade = {
             CascadeType.MERGE,
@@ -31,6 +33,7 @@ public class Donation {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories = new ArrayList<>();
+
 
     @ManyToOne(cascade = {
             CascadeType.MERGE
@@ -55,6 +58,9 @@ public class Donation {
 
     @Column(name = "pick_up_comment")
     private String pickUpComment;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     public void addCategory(Category category) {
         categories.removeIf(c -> c.getId().equals(category.getId()));

@@ -2,10 +2,17 @@ package marcykiewicz.mateusz.charitydonationlab.donation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marcykiewicz.mateusz.charitydonationlab.category.CategoryService;
+import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryDTO;
+import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationDTO;
+import marcykiewicz.mateusz.charitydonationlab.institution.InstitutionService;
+import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -14,11 +21,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DonationController {
 
    private final DonationService donationService;
+   private final CategoryService categoryService;
+   private final InstitutionService institutionService;
 
     @GetMapping("/donate")
     public String showDonationForm(Model model) {
 
-        model.addAttribute("donation", new Donation());
+        List<CategoryDTO> categoryDTOs = categoryService.findAll();
+        List<InstitutionDTO> institutionDTOs = institutionService.findAll();
+
+        log.info("{}", categoryDTOs);
+
+        model.addAttribute("donation", new DonationDTO());;
+        model.addAttribute("categories", categoryDTOs);
+        model.addAttribute("institutions", institutionDTOs);
 
         return "form";
     }

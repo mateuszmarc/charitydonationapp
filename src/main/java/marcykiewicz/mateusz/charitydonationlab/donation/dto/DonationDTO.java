@@ -31,4 +31,6 @@ public class DonationDTO {
     private LocalTime pickUpTime;
 
     private String pickUpComment;
+
+    private String phoneNumber;
 }

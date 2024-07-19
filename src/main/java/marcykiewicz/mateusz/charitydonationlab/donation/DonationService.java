@@ -17,4 +17,6 @@ public interface DonationService {
     DonationDTO update(DonationDTO donationDTO);
 
     DonationDTO removeById(Long id);
+
+    Integer getSumOfQuantities();
 }

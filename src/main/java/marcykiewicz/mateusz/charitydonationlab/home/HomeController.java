@@ -2,6 +2,7 @@ package marcykiewicz.mateusz.charitydonationlab.home;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marcykiewicz.mateusz.charitydonationlab.donation.DonationService;
 import marcykiewicz.mateusz.charitydonationlab.institution.InstitutionService;
 import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionDTO;
 import org.springframework.stereotype.Controller;
@@ -16,16 +17,18 @@ import java.util.List;
 public class HomeController {
 
     private final InstitutionService institutionService;
+    private final DonationService donationService;
 
     @GetMapping("/home")
     public String displayHomePage(Model model) {
 
         List<List<InstitutionDTO>> institutionDTOs = institutionService.findAllInstitutionsGroupedBYTwo();
+        Integer donatedBags = donationService.getSumOfQuantities();
 
         log.info("{}", institutionDTOs);
 
         model.addAttribute("institutions", institutionDTOs);
-
+        model.addAttribute("donatedBags", donatedBags);
         return "index";
     }
 

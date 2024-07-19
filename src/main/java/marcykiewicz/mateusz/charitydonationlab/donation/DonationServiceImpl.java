@@ -70,17 +70,17 @@ public class DonationServiceImpl implements DonationService {
     @Override
     public DonationDTO save(DonationDTO donationDTO) {
 
-
-        Institution institution = getInstitutionFromDonationDTO(donationDTO);
-
-
-        List<Category> categories = getCategoriesFromDonationDTO(donationDTO);
-
-
         Donation donation = donationMapper.toEntity(donationDTO);
 
-        donation.setCategories(categories);
+        Institution institution = getInstitutionFromDonationDTO(donationDTO);
         donation.setInstitution(institution);
+
+
+        if (donationDTO.getCategoryDTOs() != null) {
+            List<Category> categories = getCategoriesFromDonationDTO(donationDTO);
+            donation.setCategories(categories);
+
+        }
 
        Donation savedDonation = donationRepository.save(donation);
 
@@ -114,12 +114,14 @@ public class DonationServiceImpl implements DonationService {
 
     private void updateDonationFields(DonationDTO donationSourceDTO, Donation targetDonation) {
 
-        Institution institution = getInstitutionFromDonationDTO(donationSourceDTO);
+        if (donationSourceDTO.getInstitutionDTO() != null) {
+            Institution institution = getInstitutionFromDonationDTO(donationSourceDTO);
+            targetDonation.setInstitution(institution);
 
+        }
         List<Category> categories = getCategoriesFromDonationDTO(donationSourceDTO);
 
         targetDonation.setQuantity(donationSourceDTO.getQuantity());
-        targetDonation.setInstitution(institution);
 
         targetDonation.getCategories().clear();
         targetDonation.getCategories().addAll(categories);
@@ -161,5 +163,11 @@ public class DonationServiceImpl implements DonationService {
                     return donationMapper.toDTO(donation);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(resourceNOtFoundExceptionMessage.formatted(id)));
+    }
+
+    @Override
+    public Integer getSumOfQuantities() {
+
+        return donationRepository.getSumOfDonationBags();
     }
 }

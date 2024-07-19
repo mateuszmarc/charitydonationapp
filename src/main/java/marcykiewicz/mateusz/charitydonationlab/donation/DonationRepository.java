@@ -9,4 +9,7 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
 
     @Query(value = "SELECT d FROM Donation d LEFT JOIN FETCH d.categories WHERE d.id=:donationId")
     Optional<Donation> findByIdFetchCategories(Long donationId);
+
+    @Query(value = "SELECT SUM(d.quantity) FROM Donation d")
+    Integer getSumOfDonationBags();
 }

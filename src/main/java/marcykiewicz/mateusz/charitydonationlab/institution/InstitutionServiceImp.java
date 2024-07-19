@@ -11,6 +11,7 @@ import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionMapper
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,27 @@ public class InstitutionServiceImp implements InstitutionService {
         List<Institution> categories = institutionRepository.findAll();
 
         return categories.stream().map(institutionMapper::toDTO).toList();
+    }
+
+    @Override
+    public List<List<InstitutionDTO>> findAllInstitutionsGroupedBYTwo() {
+
+        List<Institution> institutions = institutionRepository.findAll();
+
+        List<List<InstitutionDTO>> institutionsGroupedByTwo = new ArrayList<>();
+
+        for (int i = 0; i <= institutions.size(); i++) {
+            if (i % 2 == 0) {
+                List<InstitutionDTO> institutionPair = new ArrayList<>();
+                institutionPair.add(institutionMapper.toDTO(institutions.get(i)));
+                if (i + 1 < institutions.size()) {
+                    institutionPair.add(institutionMapper.toDTO(institutions.get(i + 1)));
+                }
+                institutionsGroupedByTwo.add(institutionPair);
+            }
+        }
+
+        return institutionsGroupedByTwo;
     }
 
     @Override

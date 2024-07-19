@@ -24,11 +24,13 @@ public class HomeController {
 
         List<List<InstitutionDTO>> institutionDTOs = institutionService.findAllInstitutionsGroupedBYTwo();
         Integer donatedBags = donationService.getSumOfQuantities();
+        Integer donationCount = donationService.getDonationCount();
 
         log.info("{}", institutionDTOs);
 
         model.addAttribute("institutions", institutionDTOs);
         model.addAttribute("donatedBags", donatedBags);
+        model.addAttribute("donationCount", donationCount);
         return "index";
     }
 

@@ -72,15 +72,13 @@ public class DonationServiceImpl implements DonationService {
 
         Donation donation = donationMapper.toEntity(donationDTO);
 
-        Institution institution = getInstitutionFromDonationDTO(donationDTO);
-        donation.setInstitution(institution);
-
-
-        if (donationDTO.getCategoryDTOs() != null) {
-            List<Category> categories = getCategoriesFromDonationDTO(donationDTO);
-            donation.setCategories(categories);
-
+        if (donationDTO.getInstitutionDTO() != null) {
+            Institution institution = getInstitutionFromDonationDTO(donationDTO);
+            donation.setInstitution(institution);
         }
+
+        List<Category> categories = getCategoriesFromDonationDTO(donationDTO);
+            donation.setCategories(categories);
 
        Donation savedDonation = donationRepository.save(donation);
 
@@ -169,5 +167,10 @@ public class DonationServiceImpl implements DonationService {
     public Integer getSumOfQuantities() {
 
         return donationRepository.getSumOfDonationBags();
+    }
+
+    @Override
+    public Integer getDonationCount() {
+        return donationRepository.getDonationsCount();
     }
 }

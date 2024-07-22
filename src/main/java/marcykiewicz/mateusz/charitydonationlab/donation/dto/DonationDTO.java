@@ -1,8 +1,10 @@
 package marcykiewicz.mateusz.charitydonationlab.donation.dto;
 
+import jakarta.validation.constraints.Future;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryDTO;
 import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,8 +28,10 @@ public class DonationDTO {
 
     private String zipCode;
 
+    @Future
     private LocalDate pickUpDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalTime pickUpTime;
 
     private String pickUpComment;

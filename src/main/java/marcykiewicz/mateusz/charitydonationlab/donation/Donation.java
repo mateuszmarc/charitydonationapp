@@ -1,9 +1,11 @@
 package marcykiewicz.mateusz.charitydonationlab.donation;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.category.Category;
 import marcykiewicz.mateusz.charitydonationlab.institution.Institution;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -50,9 +52,11 @@ public class Donation {
     @Column(name = "zip_code")
     private String zipCode;
 
+    @Future
     @Column(name = "pick_up_date")
     private LocalDate pickUpDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "pick_up_time")
     private LocalTime pickUpTime;
 

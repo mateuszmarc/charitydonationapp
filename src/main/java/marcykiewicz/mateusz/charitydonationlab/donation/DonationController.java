@@ -53,6 +53,8 @@ public class DonationController {
         if (bindingResult.hasErrors()) {
             return "form";
         }
+
+        donationService.save(donationDTO);
         return "form-confirmation";
     }
 }

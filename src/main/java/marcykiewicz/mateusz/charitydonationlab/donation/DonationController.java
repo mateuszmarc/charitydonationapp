@@ -37,7 +37,7 @@ public class DonationController {
         log.info("{}", categoryDTOs);
 
         model.addAttribute("donationDTO", new DonationDTO());;
-        model.addAttribute("categoryDTOs", categoryDTOs);
+        model.addAttribute("categories", categoryDTOs);
         model.addAttribute("institutions", institutionDTOs);
 
         return "form";

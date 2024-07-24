@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,15 +15,15 @@
 
     <section class="login-page">
       <h2>Załóż konto</h2>
-      <form>
+      <form th:action="@{/register}" th:method="POST" th:object="${request}">
         <div class="form-group">
-          <input type="email" name="email" placeholder="Email" />
+          <input type="email" name="email" placeholder="Email" th:field="${request.email}" />
         </div>
         <div class="form-group">
-          <input type="password" name="password" placeholder="Hasło" />
+          <input type="password" name="password" placeholder="Hasło" th:field="${request.password}"/>
         </div>
         <div class="form-group">
-          <input type="password" name="password2" placeholder="Powtórz hasło" />
+          <input type="password" name="password2" placeholder="Powtórz hasło" th:field="${request.passwordRepeat}"/>
         </div>
 
         <div class="form-group form-group--buttons">

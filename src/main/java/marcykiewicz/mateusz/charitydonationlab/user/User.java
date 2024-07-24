@@ -21,7 +21,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
@@ -53,6 +52,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Donation> donations = new ArrayList<>();
 
+    public User(String email, String password, String appUserRole) {
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
+    }
 
     public void addDonation(Donation donation) {
 

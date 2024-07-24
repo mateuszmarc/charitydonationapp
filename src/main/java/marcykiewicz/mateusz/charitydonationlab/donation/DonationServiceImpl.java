@@ -166,7 +166,9 @@ public class DonationServiceImpl implements DonationService {
     @Override
     public Integer getSumOfQuantities() {
 
-        return donationRepository.getSumOfDonationBags();
+        Integer quantity = donationRepository.getSumOfDonationBags();
+
+        return quantity == null ? 0 : quantity;
     }
 
     @Override

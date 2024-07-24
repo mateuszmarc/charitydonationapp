@@ -27,6 +27,8 @@ public class HomeController {
         Integer donationCount = donationService.getDonationCount();
 
         log.info("{}", institutionDTOs);
+        log.info("{}", donatedBags);
+        log.info("{}", donationCount);
 
         model.addAttribute("institutions", institutionDTOs);
         model.addAttribute("donatedBags", donatedBags);

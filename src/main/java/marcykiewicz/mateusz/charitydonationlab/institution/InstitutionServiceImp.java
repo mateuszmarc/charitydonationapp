@@ -71,7 +71,7 @@ public class InstitutionServiceImp implements InstitutionService {
 
         List<List<InstitutionDTO>> institutionsGroupedByTwo = new ArrayList<>();
 
-        for (int i = 0; i <= institutions.size(); i++) {
+        for (int i = 0; i < institutions.size(); i++) {
             if (i % 2 == 0) {
                 List<InstitutionDTO> institutionPair = new ArrayList<>();
                 institutionPair.add(institutionMapper.toDTO(institutions.get(i)));

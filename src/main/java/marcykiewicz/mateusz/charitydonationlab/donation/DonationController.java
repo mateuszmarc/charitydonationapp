@@ -1,48 +1,60 @@
 package marcykiewicz.mateusz.charitydonationlab.donation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import marcykiewicz.mateusz.charitydonationlab.category.CategoryService;
+import marcykiewicz.mateusz.charitydonationlab.category.categorydto.CategoryDTO;
 import marcykiewicz.mateusz.charitydonationlab.donation.dto.DonationDTO;
-import org.springframework.web.bind.annotation.*;
+import marcykiewicz.mateusz.charitydonationlab.institution.InstitutionService;
+import marcykiewicz.mateusz.charitydonationlab.institution.dto.InstitutionDTO;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/donations")
 public class DonationController {
 
-    private final DonationService donationService;
+   private final DonationService donationService;
+   private final CategoryService categoryService;
+   private final InstitutionService institutionService;
 
-    @GetMapping
-    private List<DonationDTO> findAllDonations() {
+    @GetMapping("/donate")
+    public String showDonationForm(Model model) {
 
-        return donationService.findAll();
+        List<CategoryDTO> categoryDTOs = categoryService.findAll();
+        List<InstitutionDTO> institutionDTOs = institutionService.findAll();
+
+        log.info("{}", categoryDTOs);
+
+        model.addAttribute("donationDTO", new DonationDTO());;
+        model.addAttribute("categories", categoryDTOs);
+        model.addAttribute("institutions", institutionDTOs);
+
+        return "form";
     }
 
-    @GetMapping("/{id}")
-    public DonationDTO findById(@PathVariable Long id) {
+    @PostMapping("/donate")
+    public String processDonationForm(@Valid @ModelAttribute DonationDTO donationDTO,
+                                      BindingResult bindingResult
+                                      ) {
 
-        return  donationService.findById(id);
-    }
+        log.info("{}", donationDTO);
 
-    @PostMapping
-    public DonationDTO saveDonation(@RequestBody DonationDTO donationDTO) {
+        if (bindingResult.hasErrors()) {
+            return "form";
+        }
 
-        log.info("Donation to be saved: {}", donationDTO);
-        return donationService.save(donationDTO);
-    }
-
-    @PutMapping
-    public DonationDTO updateDonation(@RequestBody DonationDTO donationDTO) {
-
-       return donationService.update(donationDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public DonationDTO removeDonationById(@PathVariable Long id) {
-
-        return donationService.removeById(id);
+        donationService.save(donationDTO);
+        return "form-confirmation";
     }
 }

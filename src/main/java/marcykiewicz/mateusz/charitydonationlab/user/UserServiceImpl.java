@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marcykiewicz.mateusz.charitydonationlab.exception.UserAlreadyExistsException;
 import marcykiewicz.mateusz.charitydonationlab.registration.RegistrationRequestDTO;
+import marcykiewicz.mateusz.charitydonationlab.registration.token.VerificationToken;
+import marcykiewicz.mateusz.charitydonationlab.registration.token.VerificationTokenRepository;
 import marcykiewicz.mateusz.charitydonationlab.user.userdto.UserDTO;
 import marcykiewicz.mateusz.charitydonationlab.user.userdto.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     @Override
     public List<UserDTO> findAll() {
@@ -72,6 +75,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveVerificationToken(User user, String verificationToken) {
 
+        VerificationToken token = new VerificationToken(verificationToken, user);
+        verificationTokenRepository.save(token);
     }
 
     @Override

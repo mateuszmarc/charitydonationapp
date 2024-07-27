@@ -14,5 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailJoinFetchDonations(String userEmail);
 
     @Query(value = "SELECT u FROM User u WHERE u.email=:userEmail")
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String userEmail);
 }

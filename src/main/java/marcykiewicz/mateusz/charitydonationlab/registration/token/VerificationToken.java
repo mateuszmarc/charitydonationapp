@@ -1,11 +1,17 @@
 package marcykiewicz.mateusz.charitydonationlab.registration.token;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import marcykiewicz.mateusz.charitydonationlab.user.User;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "verification_tokens")
 public class VerificationToken {
 
     @Value("${tokenExpirationTime}")

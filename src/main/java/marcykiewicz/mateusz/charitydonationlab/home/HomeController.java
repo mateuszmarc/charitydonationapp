@@ -41,11 +41,6 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String showRegisterFrom() {
-        return "register";
-    }
-
     @GetMapping("/registerConfirmation")
     public String displayConfirmationForm() {
         return "form-confirmation";

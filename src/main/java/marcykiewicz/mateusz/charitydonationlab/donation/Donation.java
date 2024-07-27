@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.category.Category;
 import marcykiewicz.mateusz.charitydonationlab.institution.Institution;
+import marcykiewicz.mateusz.charitydonationlab.user.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -75,6 +76,14 @@ public class Donation {
     @NotNull
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @ManyToOne(cascade = {
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    }
+    )
+    private User user;
 
     public void addCategory(Category category) {
         categories.removeIf(c -> c.getId().equals(category.getId()));

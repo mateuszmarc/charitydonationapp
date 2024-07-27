@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
+import marcykiewicz.mateusz.charitydonationlab.registration.token.VerificationToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Donation> donations = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private VerificationToken verificationToken;
 
     public User(String email, String password, String appUserRole) {
         this.email = email;

@@ -15,7 +15,7 @@ public interface UserService {
 
     UserDTO findByEmailFetchDonations(String email);
 
-    UserDTO register(RegistrationRequestDTO registrationRequestDTO);
+    User register(RegistrationRequestDTO registrationRequestDTO);
 
     void saveVerificationToken(User user, String verificationToken);
 

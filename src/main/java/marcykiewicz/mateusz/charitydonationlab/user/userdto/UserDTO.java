@@ -2,7 +2,6 @@ package marcykiewicz.mateusz.charitydonationlab.user.userdto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
 
@@ -25,7 +24,6 @@ public class UserDTO {
     private String email;
 
     @NotNull
-    @Size
     private String password;
 
     private String phoneNumber;

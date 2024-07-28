@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO register(RegistrationRequestDTO registrationRequestDTO) {
+    public User register(RegistrationRequestDTO registrationRequestDTO) {
         Optional<User> foundUser = userRepository.findByEmail(registrationRequestDTO.getEmail());
 
         if (foundUser.isPresent()) {
@@ -67,9 +67,7 @@ public class UserServiceImpl implements UserService {
         );
 
 
-        User savedUser = userRepository.save(user);
-
-        return userMapper.toDTO(user);
+        return userRepository.save(user);
     }
 
     @Override

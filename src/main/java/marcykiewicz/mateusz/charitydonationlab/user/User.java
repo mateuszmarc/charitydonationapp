@@ -3,7 +3,6 @@ package marcykiewicz.mateusz.charitydonationlab.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import marcykiewicz.mateusz.charitydonationlab.donation.Donation;
@@ -34,7 +33,6 @@ public class User {
     private String email;
 
     @NotNull
-    @Size
     @Column(name = "password")
     private String password;
 
